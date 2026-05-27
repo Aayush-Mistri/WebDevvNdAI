@@ -1,0 +1,22 @@
+<html>
+    <body>
+        <h1 id="display">25:00</h1>
+        <button id="start">Start</button>
+   </body>
+    <script>
+        let disp = document.getElementById('display').innerHTML;
+        let seconds = 25 * 60;
+        let timer = null; // store the interval here
+
+        document.getElementById("start").addEventListener("click", function() {
+            timer = setInterval(function() {
+                seconds = seconds - 1;
+                let minutes = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                // update the display here, not console.log
+                document.getElementById("display").innerHTML = minutes + ":" + secs;
+            }, 1000)
+        })
+
+    </script>
+</html>

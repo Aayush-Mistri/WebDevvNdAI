@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+
+    <div style="display:flex; justify-content:center; align-items:center; height:10vh;">
+
+        <div style="display:flex; gap:15px;">
+
+            <input type="text" placeholder="Enter GitHub username.." id="username"
+                style="padding:16px; width:350px; font-size:18px; border:2px solid #ccc; border-radius:8px;">
+
+            <button id="search"
+                style="padding:16px 28px; font-size:18px; border:none; background:black; color:white; border-radius:8px; cursor:pointer;">
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+    <div style="display:flex; justify-content:center; margin-top:40px;">
+
+        <div style="
+            width:400px;
+            padding:20px;
+            border:1px solid #ddd;
+            border-radius:12px;
+            background:#fff;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+            font-family:Arial;
+        ">
+
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+
+                <img src="" alt="Profile" id="profilepic" style="
+                    width:80px;
+                    height:80px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    
+                ">
+
+                <div>
+                    <h2 id="dataname" style="margin:0; font-size:24px;"></h2>
+                    <p id="datalogin" style="margin:5px 0 0; color:gray;"></p>
+                </div>
+
+            </div>
+
+            <p id="databio" style="font-size:16px; color:#444; margin-bottom:20px;">
+
+            </p>
+
+            <div style="display:flex; justify-content:space-between; text-align:center;">
+
+                <div>
+                    <strong id="datafollowers"></strong><br>
+                    Followers
+                </div>
+
+                <div>
+                    <strong id="datafollowing"></strong><br>
+                    Following
+                </div>
+
+                <div>
+                    <strong id="datapublicrepos"></strong><br>
+                    Repos
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+
+
+        document.getElementById("search").addEventListener("click", function () {
+            test()
+        })
+
+
+
+        async function test() {
+
+            try {
+                let username = document.getElementById("username").value
+                let response = await fetch(`https://api.github.com/users/${username}`)
+                let data = await response.json()
+
+                document.getElementById('dataname').innerHTML = data.name;
+                document.getElementById('datalogin').innerHTML = data.login;
+                document.getElementById('databio').innerHTML = data.bio;
+                document.getElementById('datafollowers').innerHTML = data.followers;
+                document.getElementById('datafollowing').innerHTML = data.following;
+                document.getElementById('datapublicrepos').innerHTML = data.public_repos;
+                document.getElementById('profilepic').src = data.avatar_url
+
+
+
+                console.log(data);
+            } catch (error) {
+                document.getElementById('dataname').innerHTML = "Username does not exist";
+
+            }
+
+
+        }
+
+
+
+
+
+    </script>
+</body>
+
+</html>

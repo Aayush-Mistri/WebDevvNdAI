@@ -1,0 +1,41 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>To do list</h1>
+        <input type="text" id="type">
+        <button id="add">Add</button>
+        <button id="delete">Delete all</button>
+        <div id="container"></div>
+    </body>
+    <script>
+        
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        
+        render(); // render saved tasks on page load
+
+        document.getElementById("add").addEventListener("click", function() {
+            let value = document.getElementById("type").value;
+            if (value === "") return; // don't add empty tasks
+            tasks.push(value);
+            localStorage.setItem("tasks", JSON.stringify(tasks)); // auto-save on every add
+            render();
+        })
+
+        document.getElementById("delete").addEventListener("click", function() {
+            tasks = [];
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            render();
+        })
+
+        function render() {
+            let container = document.getElementById("container");
+            container.innerHTML = "";
+            tasks.forEach(function(task) {
+                let p = document.createElement("p");
+                p.textContent = task;
+                container.appendChild(p);
+            })
+        }
+    </script>
+</html>

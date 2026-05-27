@@ -1,0 +1,26 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <input type="number" value="0" id ="here">
+        <button id = "plus">+</button>
+        <button id = "minus">-</button>
+        <button id = "reset">reset</button>
+    </body>
+    <script>
+        let count = 0;
+        document.getElementById("plus").addEventListener("click" , function add() {
+            count = count + 1;
+            document.getElementById("here").value = count
+        })
+        document.getElementById("minus").addEventListener("click" , function add() {
+            count = count - 1;
+            document.getElementById("here").value = count
+        })
+        document.getElementById("reset").addEventListener("click" , function (){
+            count = 0;
+            document.getElementById("here").value = 0;
+        })
+    </script>
+</html>

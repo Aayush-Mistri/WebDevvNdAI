@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+    <input type="text" id="city">
+    <button id="search">Search</button>
+
+    <div id="result">
+        <h2 id="name"></h2>
+        <p id="temp"></p>
+        <p id="desc"></p>
+    </div>
+
+    <script>
+
+
+        document.getElementById("search").addEventListener("click", async function () {
+            let city = document.getElementById("city").value;
+
+
+            async function test() {
+                try {
+
+                    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=b85eb8d43ee69c6236083e69d72b3d3c&units=metric`)
+                    let data = await response.json()
+
+
+                    console.log(data.main.temp)
+                    console.log(data.name)
+                    console.log(data.weather[0].description)
+                    document.getElementById("name").innerHTML = data.name;
+                    document.getElementById("temp").innerHTML = data.main.temp + "°C";
+                    document.getElementById("desc").innerHTML = data.weather[0].description;
+                } catch (error) {
+                    console.log("error fetching the city");
+                    document.getElementById("name").innerHTML = "error fetching the city";
+                }
+
+
+
+
+            }
+            test()
+        })
+
+    </script>
+</body>
+
+</html>
