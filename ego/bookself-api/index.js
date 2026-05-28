@@ -5,6 +5,7 @@ app.use(express.json());
 
 
 let books = []
+let pages = []
 
 app.get('/', (req, res) => {
     res.json({ message: "Bookshelf API working" })
@@ -14,6 +15,7 @@ app.get('/books', (req, res) => {
     res.json(books)
 })
 
+
 app.post('/books', (req, res) => {
     const book = req.body;
     book.id = Date.now()
@@ -21,7 +23,7 @@ app.post('/books', (req, res) => {
     res.json({ message: "Book added", book })
 })
 
-console.log("hello world");
+
 
 
 
