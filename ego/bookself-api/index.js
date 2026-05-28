@@ -21,6 +21,7 @@ app.post('/books', (req, res) => {
     res.json({ message: "Book added", book })
 })
 
+console.log("hello");
 
 
 
