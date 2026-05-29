@@ -1,33 +1,38 @@
 const express = require('express');
 const app = express();
-
 app.use(express.json());
 
+let books = [];
 
-let books = []
-let pages = []
-
-app.get('/', (req, res) => {
-    res.json({ message: "Bookshelf API working" })
-})
-
+// GET all books
 app.get('/books', (req, res) => {
-    res.json(books)
+    res.json(books);
 })
 
-
+// POST add a book
 app.post('/books', (req, res) => {
     const book = req.body;
-    book.id = Date.now()
+    book.id = Date.now();
     books.push(book);
-    res.json({ message: "Book added", book })
+    res.json({ message: "Book added", book });
 })
 
+// PUT update a book
+app.put('/books/:id', (req, res) => {
+    let index = books.findIndex((book) => book.id === Number(req.params.id));
+    if (index === -1) return res.json({ message: "Book not found" });
+    books[index] = { ...books[index], ...req.body };
+    res.json({ message: "Book updated", book: books[index] });
+})
 
+// DELETE a book
+app.delete('/books/:id', (req, res) => {
+    let index = books.findIndex((book) => book.id === Number(req.params.id));
+    if (index === -1) return res.json({ message: "Book not found" });
+    books.splice(index, 1); 
+    res.json({ message: "Book deleted" });
+})
 
-
-
-// the server is listening on port 3000 
 app.listen(3000, () => {
     console.log("Server running on port 3000")
 })
