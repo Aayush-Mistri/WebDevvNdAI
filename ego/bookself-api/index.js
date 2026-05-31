@@ -9,7 +9,6 @@ app.get('/books', (req, res) => {
     res.json(books);
 })
 
-// POST add a book
 app.post('/books', (req, res) => {
     const book = req.body;
     book.id = Date.now();
@@ -17,7 +16,8 @@ app.post('/books', (req, res) => {
     res.json({ message: "Book added", book });
 })
 
-// PUT update a book
+
+
 app.put('/books/:id', (req, res) => {
     let index = books.findIndex((book) => book.id === Number(req.params.id));
     if (index === -1) return res.json({ message: "Book not found" });
@@ -25,7 +25,6 @@ app.put('/books/:id', (req, res) => {
     res.json({ message: "Book updated", book: books[index] });
 })
 
-// DELETE a book
 app.delete('/books/:id', (req, res) => {
     let index = books.findIndex((book) => book.id === Number(req.params.id));
     if (index === -1) return res.json({ message: "Book not found" });
