@@ -9,6 +9,10 @@ app.get('/books', (req, res) => {
     res.json(books);
 })
 
+app.get('/games', (req, res) => {
+    res.json(books);
+})
+
 app.post('/books', (req, res) => {
     const book = req.body;
     book.id = Date.now();
