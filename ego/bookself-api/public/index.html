@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookshelf API</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1f2937;
+      background: #f4f7fb;
+    }
+
+    header {
+      padding: 28px 20px;
+      color: white;
+      background: #1f2937;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      color: #d1d5db;
+    }
+
+    main {
+      width: min(1000px, 100%);
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+    }
+
+    section {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(31, 41, 55, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0;
+      font-weight: 700;
+    }
+
+    .checkbox-row input {
+      width: auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      background: #2563eb;
+    }
+
+    button.secondary {
+      color: #1f2937;
+      background: #e5e7eb;
+    }
+
+    button.danger {
+      background: #dc2626;
+    }
+
+    button.small {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    #message {
+      min-height: 22px;
+      margin-top: 12px;
+      color: #047857;
+      font-weight: 700;
+    }
+
+    .book-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .book {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfdff;
+    }
+
+    .book h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .book p {
+      margin: 4px 0;
+      color: #4b5563;
+    }
+
+    .book .book-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      text-align: center;
+      color: #64748b;
+      background: #f8fafc;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bookshelf</h1>
+    <p>Add, update, delete, and list books from your Express API.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2 id="formTitle">Add Book</h2>
+      <form id="bookForm">
+        <input type="hidden" id="bookId">
+
+        <label for="title">Title</label>
+        <input id="title" name="title" required>
+
+        <label for="author">Author</label>
+        <input id="author" name="author" required>
+
+        <label for="year">Year</label>
+        <input id="year" name="year" type="number" step="1">
+
+        <label for="genre">Genre</label>
+        <input id="genre" name="genre">
+
+        <label class="checkbox-row" for="isRead">
+          <input id="isRead" name="isRead" type="checkbox">
+          Read
+        </label>
+
+        <div class="actions">
+          <button type="submit" id="submitButton">Add Book</button>
+          <button type="button" class="secondary" id="cancelButton">Clear</button>
+        </div>
+      </form>
+      <div id="message"></div>
+    </section>
+
+    <section>
+      <h2>Books</h2>
+      <div id="books" class="book-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const booksContainer = document.getElementById('books');
+    const bookForm = document.getElementById('bookForm');
+    const bookId = document.getElementById('bookId');
+    const title = document.getElementById('title');
+    const author = document.getElementById('author');
+    const year = document.getElementById('year');
+    const genre = document.getElementById('genre');
+    const isRead = document.getElementById('isRead');
+    const message = document.getElementById('message');
+    const formTitle = document.getElementById('formTitle');
+    const submitButton = document.getElementById('submitButton');
+    const cancelButton = document.getElementById('cancelButton');
+
+    let books = [];
+
+    function showMessage(text) {
+      message.textContent = text;
+      setTimeout(() => {
+        message.textContent = '';
+      }, 2500);
+    }
+
+    function resetForm() {
+      bookForm.reset();
+      bookId.value = '';
+      formTitle.textContent = 'Add Book';
+      submitButton.textContent = 'Add Book';
+    }
+
+    function fillForm(book) {
+      bookId.value = book.id;
+      title.value = book.title;
+      author.value = book.author;
+      year.value = book.year || '';
+      genre.value = book.genre || '';
+      isRead.checked = book.isRead;
+      formTitle.textContent = 'Edit Book';
+      submitButton.textContent = 'Update Book';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderBooks() {
+      if (books.length === 0) {
+        booksContainer.innerHTML = '<div class="empty">No books yet.</div>';
+        return;
+      }
+
+      booksContainer.innerHTML = books.map((book) => `
+        <article class="book">
+          <h3>${book.title}</h3>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p><strong>Year:</strong> ${book.year || 'Not set'}</p>
+          <p><strong>Genre:</strong> ${book.genre || 'Not set'}</p>
+          <p><strong>Status:</strong> ${book.isRead ? 'Read' : 'Unread'}</p>
+          <div class="book-actions">
+            <button class="small" onclick="editBook(${book.id})">Edit</button>
+            <button class="small danger" onclick="deleteBook(${book.id})">Delete</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function loadBooks() {
+      const response = await fetch('/books');
+      books = await response.json();
+      renderBooks();
+    }
+
+    async function saveBook(event) {
+      event.preventDefault();
+
+      const payload = {
+        title: title.value,
+        author: author.value,
+        year: year.value ? Number(year.value) : null,
+        genre: genre.value,
+        isRead: isRead.checked,
+      };
+      const id = bookId.value;
+      const url = id ? `/books/${id}` : '/books';
+      const method = id ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        showMessage(result.message || 'Something went wrong');
+        return;
+      }
+
+      resetForm();
+      showMessage(result.message);
+      await loadBooks();
+    }
+
+    function editBook(id) {
+      const book = books.find((item) => item.id === id);
+      if (book) fillForm(book);
+    }
+
+    async function deleteBook(id) {
+      const response = await fetch(`/books/${id}`, { method: 'DELETE' });
+      const result = await response.json();
+      showMessage(result.message);
+      await loadBooks();
+    }
+
+    bookForm.addEventListener('submit', saveBook);
+    cancelButton.addEventListener('click', resetForm);
+    loadBooks();
+  </script>
+</body>
+</html>
