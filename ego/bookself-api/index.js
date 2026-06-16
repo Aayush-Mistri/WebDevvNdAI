@@ -10,6 +10,8 @@ const BOOKS_FILE = path.join(DATA_DIR, 'books.json');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 async function ensureBooksFile() {
   await fs.mkdir(DATA_DIR, { recursive: true });
 
