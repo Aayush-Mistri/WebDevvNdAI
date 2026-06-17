@@ -14,6 +14,7 @@ The server starts at `http://localhost:3000`.
 
 ## Routes
 
+
 | Method | URL | What it does |
 | --- | --- | --- |
 | GET | `/` | Shows available routes |
