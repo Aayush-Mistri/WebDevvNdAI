@@ -1,2 +1,0 @@
-this api is for test purpose only 
--->asynchrounous behaviour

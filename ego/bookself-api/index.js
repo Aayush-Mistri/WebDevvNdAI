@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs/promises');
 const path = require('path');
 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
@@ -10,6 +11,9 @@ const BOOKS_FILE = path.join(DATA_DIR, 'books.json');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+console.log(DATA_DIR)
+console.log(BOOKS_FILE)
 
 
 async function ensureBooksFile() {
