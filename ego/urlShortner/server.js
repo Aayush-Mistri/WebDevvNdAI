@@ -15,7 +15,7 @@ app.post('/shorten', (req, res) => {
 
   const code = crypto.randomBytes(4).toString('hex');
   store[code] = url;
-  console.log(code)
+  
 
   res.json({
     shortCode: code,
@@ -28,9 +28,6 @@ app.get('/:code', (req, res) => {
   const code  = req.params.code;
   const url = store[code];
 
-  console.log(code)
-  console.log(url)
-  console.log(store)
 
   if (!url) {
     return res.status(404).json({ error: 'URL not found' });
