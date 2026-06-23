@@ -8,3 +8,5 @@ let b = crypto.randomBytes(3).toString('hex')
 
 console.log(a)
 console.log(b)
+
+
