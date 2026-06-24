@@ -1,0 +1,1 @@
+This repo is mainly practice repo to keep to keep track of practice projects and stuff
