@@ -15,8 +15,6 @@ app.get("/", (req, res) => {
   res.send("Todo API is running");
 });
 
-
-
 // CREATE todo
 app.post("/todos", async (req, res) => {
   try {
